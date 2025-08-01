@@ -8,11 +8,13 @@ import * as route from "./routes";
 
 const app: Application = express();
 
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app
   .use(urlencoded({ extended: false }))
   .use(json())
   .use(cookieParser())
-  .use(cors(corsOptions))
   .get("/", (_req: Request, res: Response) => {
     res.send(new Date());
   })

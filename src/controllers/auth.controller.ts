@@ -26,7 +26,7 @@ export const refreshToken = async (_req: Request, res: Response, next: NextFunct
           accessToken: newAccessToken,
           message: "Token renovado com sucesso",
         },
-      })
+      }),
     );
   } catch (err) {
     next(err);
