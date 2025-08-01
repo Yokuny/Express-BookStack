@@ -9,6 +9,6 @@ export const getUserById = async (userID: string) => {
   return User.findById(userID, { __v: 0 });
 };
 
-export const getUserByEmail = async (email: string) => {
-  return User.findOne({ email }, { __v: 0 });
+export const getUserByName = async (name: string) => {
+  return User.findOne({ name }, { __v: 0 });
 };

@@ -16,7 +16,8 @@ app
   .get("/", (_req: Request, res: Response) => {
     res.send(new Date());
   })
-  .use("/user", route.userRoute);
+  .use("/user", route.userRoute)
+  .use("/auth", route.authRoute);
 
 app.use("*", (_req: Request, res: Response) => {
   res.status(404).send({ message: "Rota não encontrada! 🤷‍♂️" });

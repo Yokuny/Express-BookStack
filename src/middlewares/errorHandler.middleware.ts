@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { badRespObj } from "../../../AcessRefreshToken/src/helpers/responsePattern.helper";
-import { CustomError } from "../../../AcessRefreshToken/src/models";
+import { badRespObj } from "../helpers/responsePattern.helper";
+import { CustomError } from "../models/error.type";
 
 // biome-ignore lint: any
 export const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunction): void => {
