@@ -4,7 +4,7 @@ import { respObj } from "../helpers/responsePattern.helper";
 import type { AuthReq } from "../models/interfaces.type";
 import * as service from "../service/auth.service";
 
-export const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = { ...req.body, name: req.body.name.toLowerCase() };
     const resp = await service.signin(data);
@@ -17,7 +17,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
   }
 };
 
-export const refreshToken = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const refreshToken = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const newAccessToken = res.locals.newAccessToken;
 
@@ -34,7 +34,7 @@ export const refreshToken = async (_req: Request, res: Response, next: NextFunct
   }
 };
 
-export const logout = async (req: AuthReq, res: Response, next: NextFunction): Promise<void> => {
+export const logout = async (req: AuthReq, res: Response, next: NextFunction) => {
   try {
     const resp = await service.logout(req);
 

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import { returnMessage } from "helpers/responsePattern.helper";
 import jwt from "jsonwebtoken";
 import { env } from "../config";
+import { returnMessage } from "../helpers/responsePattern.helper";
 import type { AuthReq, UserAcess } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/auth.repository";

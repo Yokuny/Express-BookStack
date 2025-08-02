@@ -1,6 +1,5 @@
 import type { NextFunction, Response } from "express";
 import * as jwt from "jsonwebtoken";
-
 import { env } from "../config/env.config";
 import type { AuthReq } from "../models";
 import { CustomError } from "../models/error.type";
