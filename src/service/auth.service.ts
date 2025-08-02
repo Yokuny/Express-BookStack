@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
+import { returnMessage } from "helpers/responsePattern.helper";
 import jwt from "jsonwebtoken";
 import { env } from "../config";
-import type { UserAcess } from "../models";
+import type { AuthReq, UserAcess } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/auth.repository";
 import { getUserByName } from "./user.service";
@@ -24,4 +25,9 @@ export const signin = async (data: UserAcess): Promise<{ refreshToken: string; a
   });
 
   return { refreshToken, accessToken };
+};
+
+export const logout = async (req: AuthReq) => {
+  await repository.removeRefreshToken(req.user);
+  return returnMessage("Logout realizado com sucesso");
 };

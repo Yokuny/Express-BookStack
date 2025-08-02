@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { cookieOptions } from "../config/cookie.config";
+import { clearCookieOptions, cookieOptions } from "../config/cookie.config";
 import { respObj } from "../helpers/responsePattern.helper";
+import type { AuthReq } from "../models/interfaces.type";
 import * as service from "../service/auth.service";
 
 export const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -28,6 +29,17 @@ export const refreshToken = async (_req: Request, res: Response, next: NextFunct
         },
       }),
     );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const logout = async (req: AuthReq, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const resp = await service.logout(req);
+
+    res.clearCookie("refreshToken", clearCookieOptions);
+    res.status(204).json(respObj(resp));
   } catch (err) {
     next(err);
   }

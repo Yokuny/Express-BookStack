@@ -7,5 +7,6 @@ const authRoute = Router();
 
 authRoute.post("/signin", validBody(userAcessSchema), controller.signin);
 authRoute.post("/refresh", validRefreshToken, controller.refreshToken);
+authRoute.post("/logout", validRefreshToken, controller.logout);
 
 export { authRoute };
