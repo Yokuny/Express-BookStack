@@ -11,14 +11,14 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
-export const getUserByEmail = async (email: string, required = true) => {
-  const user = await repository.getUserByEmail(email);
+export const getUserByName = async (name: string, required = true) => {
+  const user = await repository.getUserByName(name);
   if (!user && required) throw new CustomError("Usuário não encontrado", 404);
   return user;
 };
 
 export const signup = async (data: UserAcess): Promise<ServiceRes> => {
-  const user = await getUserByEmail(data.email, false);
+  const user = await getUserByName(data.name, false);
   if (user) throw new CustomError("Usuário já existe", 409);
 
   const cryptPassword = await bcrypt.hash(data.password, 10);

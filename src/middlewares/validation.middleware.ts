@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import type { Schema } from "zod";
-import { capitalize } from "../../../AcessRefreshToken/src/helpers/convert.helper";
-import { CustomError } from "../../../AcessRefreshToken/src/models";
+import type { ZodType } from "zod";
+import { capitalize } from "../helpers/convert.helper";
+import { CustomError } from "../models/error.type";
 
 // biome-ignore lint: any
 const extractErrorMessage = (err: any) => {
@@ -16,7 +16,7 @@ const extractErrorMessage = (err: any) => {
   return `O campo '${path}' recebeu '${received}'. ${erroMessage}`;
 };
 
-const validate = (schema: Schema, type: "body" | "params" | "query") => {
+const validate = (schema: ZodType, type: "body" | "params" | "query") => {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       schema.parse(req[type]);
@@ -38,14 +38,14 @@ const validate = (schema: Schema, type: "body" | "params" | "query") => {
   };
 };
 
-export const validBody = (schema: Schema) => {
+export const validBody = (schema: ZodType) => {
   return validate(schema, "body");
 };
 
-export const validParams = (schema: Schema) => {
+export const validParams = (schema: ZodType) => {
   return validate(schema, "params");
 };
 
-export const validQuery = (schema: Schema) => {
+export const validQuery = (schema: ZodType) => {
   return validate(schema, "query");
 };

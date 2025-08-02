@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { emailRegExp, passwordRegExp } from "../helpers/regex.helper";
+import { passwordRegExp } from "../helpers/regex.helper";
 
 export const userAcessSchema = z.object({
-  email: z.email("Email inválido").trim().min(5, "Email deve ter no mínimo 5 caracteres").max(50, "Email deve ter no máximo 50 caracteres").regex(emailRegExp),
+  name: z.string().trim().min(5, "Nome deve ter no mínimo 5 caracteres").max(50, "Nome deve ter no máximo 50 caracteres"),
   password: z
     .string()
     .trim()
