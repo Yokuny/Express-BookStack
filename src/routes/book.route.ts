@@ -12,6 +12,7 @@ bookRoute.post("/", validBody(bookSchema), controller.createBook);
 bookRoute.get("/", validQuery(bookQuerySchema), controller.getBooks);
 bookRoute.get("/:isbn", validParams(bookParamsSchema), controller.getBookByIsbn);
 bookRoute.put("/:isbn", validParams(bookParamsSchema), validBody(bookUpdateSchema), controller.updateBook);
+bookRoute.patch("/:isbn/favorite", validParams(bookParamsSchema), controller.toggleFavoriteBook);
 bookRoute.delete("/:isbn", validParams(bookParamsSchema), controller.deleteBook);
 
 export { bookRoute };

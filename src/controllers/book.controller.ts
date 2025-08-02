@@ -60,3 +60,14 @@ export const deleteBook = async (req: AuthReq, res: Response, next: NextFunction
     next(err);
   }
 };
+
+export const toggleFavoriteBook = async (req: AuthReq, res: Response, next: NextFunction) => {
+  try {
+    const { isbn } = req.params;
+    const userID = req.user;
+    const resp = await service.toggleFavoriteBook(isbn, userID);
+    res.status(200).json(respObj(resp));
+  } catch (err) {
+    next(err);
+  }
+};

@@ -39,3 +39,11 @@ export const deleteBook = async (isbn: string, userID: string): Promise<ServiceR
 
   return returnMessage("Livro removido com sucesso");
 };
+
+export const toggleFavoriteBook = async (isbn: string, userID: string): Promise<ServiceRes> => {
+  const book = await getBookByIsbn(isbn, userID);
+  const updatedBook = await repository.toggleFavoriteBook(isbn, userID, !book.isFavorite);
+  const bookReference = { isbn: updatedBook.isbn, isFavorite: updatedBook.isFavorite };
+
+  return returnDataMessage(bookReference, `Livro ${updatedBook.isFavorite ? "adicionado aos" : "removido dos"} favoritos com sucesso`);
+};

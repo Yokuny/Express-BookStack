@@ -31,7 +31,7 @@ export const getAllBooksByUser = async (userID: string, bookQuery: BookQuery) =>
   const filter = { ...baseFilter, ...searchFilter };
 
   const [books, totalCount] = await Promise.all([
-    Book.find(filter).select("-_id name author isbn stock").sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Book.find(filter).select("-_id name author isbn stock isFavorite").sort({ createdAt: -1 }).skip(skip).limit(limit),
     Book.countDocuments(filter),
   ]);
 
@@ -57,4 +57,8 @@ export const updateBook = async (isbn: string, userID: string, data: Partial<Boo
 
 export const deleteBook = async (isbn: string, userID: string) => {
   return Book.findOneAndDelete({ isbn, userID });
+};
+
+export const toggleFavoriteBook = async (isbn: string, userID: string, isFavorite: boolean) => {
+  return Book.findOneAndUpdate({ isbn, userID }, { isFavorite }, { new: true, projection });
 };
