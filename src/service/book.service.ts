@@ -1,6 +1,6 @@
 import type { ServiceRes } from "../helpers/responsePattern.helper";
 import { returnData, returnDataMessage, returnMessage } from "../helpers/responsePattern.helper";
-import type { BookCreateData, BookData } from "../models";
+import type { BookCreateData, BookData, Pagination } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/book.repository";
 
@@ -19,9 +19,9 @@ export const createBook = async (data: BookData, userID: string): Promise<Servic
   return returnMessage("Livro adicionado com sucesso");
 };
 
-export const getAllBooksByUser = async (userID: string): Promise<ServiceRes> => {
-  const books = await repository.getAllBooksByUser(userID);
-  return returnData(books);
+export const getAllBooksByUser = async (userID: string, pagination: Pagination): Promise<ServiceRes> => {
+  const result = await repository.getAllBooksByUser(userID, pagination);
+  return returnData(result);
 };
 
 export const updateBook = async (isbn: string, userID: string, data: Partial<BookData>): Promise<ServiceRes> => {
