@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as controller from "../controllers/book.controller";
 import { validBody, validParams, validQuery, validToken } from "../middlewares";
 import { bookParamsSchema, bookSchema, bookUpdateSchema } from "../schemas/book.schema";
-import { bookQuerySchema } from "../schemas/pagination.schema";
+import { bookQuerySchema } from "../schemas/bookQuery.schema";
 
 const bookRoute = Router();
 

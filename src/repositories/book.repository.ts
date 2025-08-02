@@ -1,6 +1,6 @@
 import { Book } from "../database";
 import type { BookCreateData } from "../models";
-import type { BookQuery } from "../schemas/pagination.schema";
+import type { BookQuery } from "../schemas/bookQuery.schema";
 
 const projection = { _id: 0, __v: 0, userID: 0 } as const;
 

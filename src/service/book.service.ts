@@ -1,9 +1,9 @@
 import type { ServiceRes } from "../helpers/responsePattern.helper";
 import { returnData, returnDataMessage, returnMessage } from "../helpers/responsePattern.helper";
 import type { BookCreateData, BookData } from "../models";
-import type { BookQuery } from "../schemas/pagination.schema";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/book.repository";
+import type { BookQuery } from "../schemas/bookQuery.schema";
 
 export const getBookByIsbn = async (isbn: string, userID: string, required: boolean = true) => {
   const book = await repository.getBookByIsbn(isbn, userID);
