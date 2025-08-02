@@ -17,8 +17,8 @@ export const createBook = async (req: AuthReq, res: Response, next: NextFunction
 export const getBooks = async (req: AuthReq, res: Response, next: NextFunction) => {
   try {
     const userID = req.user;
-    const pagination = req.query;
-    const books = await service.getAllBooksByUser(userID, pagination);
+    const bookQuery = req.query;
+    const books = await service.getAllBooksByUser(userID, bookQuery);
 
     res.status(200).json(respObj(books));
   } catch (err) {

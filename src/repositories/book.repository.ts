@@ -1,5 +1,6 @@
 import { Book } from "../database";
-import type { BookCreateData, Pagination } from "../models";
+import type { BookCreateData } from "../models";
+import type { BookQuery } from "../schemas/pagination.schema";
 
 const projection = { _id: 0, __v: 0, userID: 0 } as const;
 
@@ -11,13 +12,27 @@ export const getBookByIsbn = async (isbn: string, userID: string) => {
   return Book.findOne({ isbn, userID }, projection);
 };
 
-export const getAllBooksByUser = async (userID: string, pagination: Pagination) => {
-  const { page, limit } = pagination;
+export const getAllBooksByUser = async (userID: string, bookQuery: BookQuery) => {
+  const { page, limit, search } = bookQuery;
   const skip = (page - 1) * limit;
 
+  const baseFilter = { userID };
+  const searchFilter = search
+    ? {
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { author: { $regex: search, $options: "i" } },
+          { isbn: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const filter = { ...baseFilter, ...searchFilter };
+
   const [books, totalCount] = await Promise.all([
-    Book.find({ userID }).select("-_id name author isbn stock").sort({ createdAt: -1 }).skip(skip).limit(limit),
-    Book.countDocuments({ userID }),
+    Book.find(filter).select("-_id name author isbn stock").sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Book.countDocuments(filter),
   ]);
 
   const totalPages = Math.ceil(totalCount / limit);
