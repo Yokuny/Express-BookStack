@@ -12,7 +12,9 @@ export const getBookByIsbn = async (isbn: string, userID: string) => {
 };
 
 export const getAllBooksByUser = async (userID: string) => {
-  return Book.find({ userID }, projection).sort({ createdAt: -1 });
+  return Book.find({ userID }, { projection: { ...projection, createdAt: 0, updatedAt: 0, description: 0 } }).sort({
+    createdAt: -1,
+  });
 };
 
 export const updateBook = async (isbn: string, userID: string, data: Partial<BookCreateData>) => {
