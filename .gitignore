@@ -51,6 +51,8 @@ web_modules/
 .yarn-integrity
 
 .env
+.env.*
+!.env.example
 
 .cache
 .parcel-cache
