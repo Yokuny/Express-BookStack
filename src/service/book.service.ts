@@ -3,6 +3,7 @@ import { returnData, returnDataMessage, returnMessage } from "../helpers/respons
 import type { BookCreateData, BookData } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/book.repository";
+import type { BookQuery } from "../schemas/bookQuery.schema";
 
 export const getBookByIsbn = async (isbn: string, userID: string, required: boolean = true) => {
   const book = await repository.getBookByIsbn(isbn, userID);
@@ -19,9 +20,9 @@ export const createBook = async (data: BookData, userID: string): Promise<Servic
   return returnMessage("Livro adicionado com sucesso");
 };
 
-export const getAllBooksByUser = async (userID: string): Promise<ServiceRes> => {
-  const books = await repository.getAllBooksByUser(userID);
-  return returnData(books);
+export const getAllBooksByUser = async (userID: string, bookQuery: BookQuery): Promise<ServiceRes> => {
+  const result = await repository.getAllBooksByUser(userID, bookQuery);
+  return returnData(result);
 };
 
 export const updateBook = async (isbn: string, userID: string, data: Partial<BookData>): Promise<ServiceRes> => {
@@ -37,4 +38,12 @@ export const deleteBook = async (isbn: string, userID: string): Promise<ServiceR
   await repository.deleteBook(isbn, userID);
 
   return returnMessage("Livro removido com sucesso");
+};
+
+export const toggleFavoriteBook = async (isbn: string, userID: string): Promise<ServiceRes> => {
+  const book = await getBookByIsbn(isbn, userID);
+  const updatedBook = await repository.toggleFavoriteBook(isbn, userID, !book.isFavorite);
+  const bookReference = { isbn: updatedBook.isbn, isFavorite: updatedBook.isFavorite };
+
+  return returnDataMessage(bookReference, `Livro ${updatedBook.isFavorite ? "adicionado aos" : "removido dos"} favoritos com sucesso`);
 };

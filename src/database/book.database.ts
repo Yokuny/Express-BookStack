@@ -7,6 +7,7 @@ const bookSchema = new mongoose.Schema(
     description: { type: String, required: false, trim: true, maxlength: 1000 },
     author: { type: String, required: true, trim: true, maxlength: 100 },
     stock: { type: Number, required: true, min: 0, default: 0 },
+    isFavorite: { type: Boolean, required: false, default: false },
     userID: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   },
   {

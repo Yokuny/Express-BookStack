@@ -17,7 +17,8 @@ export const createBook = async (req: AuthReq, res: Response, next: NextFunction
 export const getBooks = async (req: AuthReq, res: Response, next: NextFunction) => {
   try {
     const userID = req.user;
-    const books = await service.getAllBooksByUser(userID);
+    const bookQuery = req.query;
+    const books = await service.getAllBooksByUser(userID, bookQuery);
 
     res.status(200).json(respObj(books));
   } catch (err) {
@@ -54,6 +55,17 @@ export const deleteBook = async (req: AuthReq, res: Response, next: NextFunction
     const { isbn } = req.params;
     const userID = req.user;
     const resp = await service.deleteBook(isbn, userID);
+    res.status(200).json(respObj(resp));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const toggleFavoriteBook = async (req: AuthReq, res: Response, next: NextFunction) => {
+  try {
+    const { isbn } = req.params;
+    const userID = req.user;
+    const resp = await service.toggleFavoriteBook(isbn, userID);
     res.status(200).json(respObj(resp));
   } catch (err) {
     next(err);
