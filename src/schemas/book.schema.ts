@@ -18,6 +18,7 @@ export const bookUpdateSchema = z.object({
   description: z.string().trim().max(1000, "Descrição deve ter no máximo 1000 caracteres").optional().default(""),
   author: z.string().trim().min(1, "Autor é obrigatório").max(100, "Nome do autor deve ter no máximo 100 caracteres"),
   stock: z.number().int("Estoque deve ser um número inteiro").min(0, "Estoque não pode ser negativo").default(0),
+  isFavorite: z.boolean().optional().default(false),
 });
 
 export const bookParamsSchema = z.object({
