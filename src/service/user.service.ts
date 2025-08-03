@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 import type { ServiceRes } from "../helpers/responsePattern.helper";
 import { returnMessage } from "../helpers/responsePattern.helper";
-import type { UserAcess } from "../models";
+import type { Tokens, UserAcess } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/user.repository";
+import * as authService from "../service/auth.service";
 
 export const getUserById = async (id: string) => {
   const user = await repository.getUserById(id);
@@ -29,4 +31,20 @@ export const signup = async (data: UserAcess): Promise<ServiceRes> => {
 
   await repository.signup(newUser);
   return returnMessage("Usuário criado com sucesso");
+};
+
+export const createGuestAccount = async (): Promise<Tokens> => {
+  const guestName = `guest_${uuidv4().replace(/-/g, "").substring(0, 12)}`;
+  const randomPassword = uuidv4().replace(/-/g, "").substring(0, 16);
+
+  const cryptPassword = await bcrypt.hash(randomPassword, 10);
+  const newUser = {
+    name: guestName,
+    password: cryptPassword,
+  };
+
+  const createdUser = await repository.signup(newUser);
+  const tokens = await authService.generateTokensForGuest(createdUser._id.toString());
+
+  return tokens;
 };

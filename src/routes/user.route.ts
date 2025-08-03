@@ -6,5 +6,6 @@ import { userAcessSchema } from "../schemas/user.schema";
 const userRoute = Router();
 
 userRoute.post("/signup", validBody(userAcessSchema), controller.signup);
+userRoute.post("/guest", controller.createGuestAccount);
 
 export { userRoute };

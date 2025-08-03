@@ -2,12 +2,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "../config";
 import { returnMessage } from "../helpers/responsePattern.helper";
-import type { AuthReq, UserAcess } from "../models";
+import type { AuthReq, Tokens, UserAcess } from "../models";
 import { CustomError } from "../models/error.type";
 import * as repository from "../repositories/auth.repository";
 import { getUserByName } from "./user.service";
 
-export const signin = async (data: UserAcess): Promise<{ refreshToken: string; accessToken: string }> => {
+export const signin = async (data: UserAcess): Promise<Tokens> => {
   const user = await getUserByName(data.name);
   if (!user) throw new CustomError("Usuário ou senha incorretos", 409);
 
@@ -21,6 +21,20 @@ export const signin = async (data: UserAcess): Promise<{ refreshToken: string; a
   await repository.updateUserRefreshToken(user._id.toString(), refreshToken);
 
   const accessToken = jwt.sign({ user: user._id }, env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1h",
+  });
+
+  return { refreshToken, accessToken };
+};
+
+export const generateTokensForGuest = async (userId: string): Promise<Tokens> => {
+  const refreshToken = jwt.sign({ user: userId }, env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "3d",
+  });
+
+  await repository.updateUserRefreshToken(userId, refreshToken);
+
+  const accessToken = jwt.sign({ user: userId }, env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1h",
   });
 
