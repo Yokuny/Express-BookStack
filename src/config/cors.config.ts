@@ -2,6 +2,7 @@ export const allowedOrigins = [
   "https://vue-book-stack.vercel.app/",
   "https://vue-book-stack-git-dev-felipe-rangel-ribeiros-projects.vercel.app/",
   "https://vue-book-stack-cqd8hn66q-felipe-rangel-ribeiros-projects.vercel.app/",
+  "https://vue-book-stack-74lue05na-felipe-rangel-ribeiros-projects.vercel.app/",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "http://localhost:3000",
