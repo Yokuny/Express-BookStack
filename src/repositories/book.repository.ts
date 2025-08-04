@@ -13,7 +13,7 @@ export const getBookByIsbn = async (isbn: string, userID: string) => {
 };
 
 export const getAllBooksByUser = async (userID: string, bookQuery: BookQuery) => {
-  const { page, limit, search } = bookQuery;
+  const { page, limit, search, favorites } = bookQuery;
   const skip = (page - 1) * limit;
 
   const baseFilter = { userID };
@@ -28,7 +28,9 @@ export const getAllBooksByUser = async (userID: string, bookQuery: BookQuery) =>
       }
     : {};
 
-  const filter = { ...baseFilter, ...searchFilter };
+  const favoritesFilter = favorites !== undefined ? { isFavorite: favorites } : {};
+
+  const filter = { ...baseFilter, ...searchFilter, ...favoritesFilter };
 
   const [books, totalCount] = await Promise.all([
     Book.find(filter).select("-_id name author isbn stock isFavorite").sort({ createdAt: -1 }).skip(skip).limit(limit),

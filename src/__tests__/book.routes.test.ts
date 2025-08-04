@@ -86,6 +86,38 @@ describe("Book Routes", () => {
       expect(Array.isArray(res.body.data.books)).toBe(true);
       expect(res.body.data.pagination).toBeDefined();
     });
+
+    it("deve filtrar livros favoritos com favorites=true", async () => {
+      await createTestBook(app, accessToken);
+      const res = await request(app).get("/books?favorites=true").set("Authorization", `Bearer ${accessToken}`);
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data.books)).toBe(true);
+      expect(res.body.data.pagination).toBeDefined();
+    });
+
+    it("deve filtrar livros não favoritos com favorites=false", async () => {
+      await createTestBook(app, accessToken);
+      const res = await request(app).get("/books?favorites=false").set("Authorization", `Bearer ${accessToken}`);
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data.books)).toBe(true);
+      expect(res.body.data.pagination).toBeDefined();
+    });
+
+    it("deve filtrar livros favoritos com favorites=1", async () => {
+      await createTestBook(app, accessToken);
+      const res = await request(app).get("/books?favorites=1").set("Authorization", `Bearer ${accessToken}`);
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data.books)).toBe(true);
+    });
+
+    it("deve retornar erro para valor inválido de favorites", async () => {
+      const res = await request(app).get("/books?favorites=invalid").set("Authorization", `Bearer ${accessToken}`);
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
   });
 
   describe("GET /books/:isbn", () => {
