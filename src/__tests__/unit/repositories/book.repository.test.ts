@@ -155,6 +155,83 @@ describe("Book Repository", () => {
       expect(mockBook.countDocuments).toHaveBeenCalledWith(expectedFilter);
     });
 
+    it("deve aplicar filtro de favoritos quando favorites=true", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "", favorites: true };
+      const expectedFilter = { userID, isFavorite: true };
+      const mockFind = {
+        select: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnValue(Promise.resolve([])),
+      };
+      mockBook.find.mockReturnValue(mockFind as any);
+      mockBook.countDocuments.mockResolvedValue(0);
+
+      await getAllBooksByUser(userID, bookQuery);
+      expect(mockBook.find).toHaveBeenCalledWith(expectedFilter);
+      expect(mockBook.countDocuments).toHaveBeenCalledWith(expectedFilter);
+    });
+
+    it("deve aplicar filtro de favoritos quando favorites=false", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "", favorites: false };
+      const expectedFilter = { userID, isFavorite: false };
+      const mockFind = {
+        select: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnValue(Promise.resolve([])),
+      };
+      mockBook.find.mockReturnValue(mockFind as any);
+      mockBook.countDocuments.mockResolvedValue(0);
+
+      await getAllBooksByUser(userID, bookQuery);
+      expect(mockBook.find).toHaveBeenCalledWith(expectedFilter);
+      expect(mockBook.countDocuments).toHaveBeenCalledWith(expectedFilter);
+    });
+
+    it("deve não aplicar filtro de favoritos quando favorites=undefined", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "", favorites: undefined };
+      const expectedFilter = { userID };
+      const mockFind = {
+        select: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnValue(Promise.resolve([])),
+      };
+      mockBook.find.mockReturnValue(mockFind as any);
+      mockBook.countDocuments.mockResolvedValue(0);
+
+      await getAllBooksByUser(userID, bookQuery);
+      expect(mockBook.find).toHaveBeenCalledWith(expectedFilter);
+      expect(mockBook.countDocuments).toHaveBeenCalledWith(expectedFilter);
+    });
+
+    it("deve combinar filtros de busca e favoritos", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "Dom", favorites: true };
+      const expectedFilter = {
+        userID,
+        $or: [
+          { name: { $regex: "Dom", $options: "i" } },
+          { author: { $regex: "Dom", $options: "i" } },
+          { isbn: { $regex: "Dom", $options: "i" } },
+          { description: { $regex: "Dom", $options: "i" } },
+        ],
+        isFavorite: true,
+      };
+      const mockFind = {
+        select: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnValue(Promise.resolve([])),
+      };
+      mockBook.find.mockReturnValue(mockFind as any);
+      mockBook.countDocuments.mockResolvedValue(0);
+
+      await getAllBooksByUser(userID, bookQuery);
+      expect(mockBook.find).toHaveBeenCalledWith(expectedFilter);
+      expect(mockBook.countDocuments).toHaveBeenCalledWith(expectedFilter);
+    });
+
     it("deve calcular paginação corretamente", async () => {
       const bookQuery: BookQuery = { page: 2, limit: 5, search: "" };
       const totalCount = 12;

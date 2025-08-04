@@ -125,6 +125,45 @@ describe("Book Service", () => {
       await getAllBooksByUser(userID, bookQuery);
       expect(mockBookRepository.getAllBooksByUser).toHaveBeenCalledWith(userID, bookQuery);
     });
+
+    it("deve passar filtro de favoritos para o repository", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "", favorites: true };
+      const mockResult = { books: [] as any[], pagination: { totalCount: 0 } };
+      mockBookRepository.getAllBooksByUser.mockResolvedValue(mockResult as any);
+
+      const result = await getAllBooksByUser(userID, bookQuery);
+      expect(mockBookRepository.getAllBooksByUser).toHaveBeenCalledWith(userID, bookQuery);
+      expect(result).toEqual({ data: mockResult });
+    });
+
+    it("deve passar filtro de não favoritos para o repository", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "", favorites: false };
+      const mockResult = { books: [] as any[], pagination: { totalCount: 0 } };
+      mockBookRepository.getAllBooksByUser.mockResolvedValue(mockResult as any);
+
+      const result = await getAllBooksByUser(userID, bookQuery);
+      expect(mockBookRepository.getAllBooksByUser).toHaveBeenCalledWith(userID, bookQuery);
+      expect(result).toEqual({ data: mockResult });
+    });
+
+    it("deve combinar busca e filtro de favoritos", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "Dom", favorites: true };
+      const mockResult = { books: [] as any[], pagination: { totalCount: 0 } };
+      mockBookRepository.getAllBooksByUser.mockResolvedValue(mockResult as any);
+
+      const result = await getAllBooksByUser(userID, bookQuery);
+      expect(mockBookRepository.getAllBooksByUser).toHaveBeenCalledWith(userID, bookQuery);
+      expect(result).toEqual({ data: mockResult });
+    });
+
+    it("deve passar favorites undefined quando não fornecido", async () => {
+      const bookQuery: BookQuery = { page: 1, limit: 10, search: "" };
+      const mockResult = { books: [] as any[], pagination: { totalCount: 0 } };
+      mockBookRepository.getAllBooksByUser.mockResolvedValue(mockResult as any);
+
+      await getAllBooksByUser(userID, bookQuery);
+      expect(mockBookRepository.getAllBooksByUser).toHaveBeenCalledWith(userID, bookQuery);
+    });
   });
 
   describe("updateBook", () => {

@@ -92,6 +92,40 @@ describe("Book Controller", () => {
       expect(mockRespObj).toHaveBeenCalledWith(mockBooks);
     });
 
+    it("deve passar filtro de favoritos para o service", async () => {
+      const mockBooks = { data: { books: [] as any[], pagination: { totalCount: 0 } } };
+      const queryParams = { favorites: "true", page: "1", limit: "10" };
+      mockAuthRequest.query = queryParams;
+      mockBookService.getAllBooksByUser.mockResolvedValue(mockBooks);
+
+      await getBooks(mockAuthRequest as AuthReq, mockResponse as Response, mockNext);
+      expect(mockBookService.getAllBooksByUser).toHaveBeenCalledWith("user-id-123", queryParams);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockNext).not.toHaveBeenCalled();
+    });
+
+    it("deve passar filtro de não favoritos para o service", async () => {
+      const mockBooks = { data: { books: [] as any[], pagination: { totalCount: 0 } } };
+      const queryParams = { favorites: "false", search: "Dom" };
+      mockAuthRequest.query = queryParams;
+      mockBookService.getAllBooksByUser.mockResolvedValue(mockBooks);
+
+      await getBooks(mockAuthRequest as AuthReq, mockResponse as Response, mockNext);
+      expect(mockBookService.getAllBooksByUser).toHaveBeenCalledWith("user-id-123", queryParams);
+      expect(mockRespObj).toHaveBeenCalledWith(mockBooks);
+    });
+
+    it("deve combinar filtros de busca e favoritos", async () => {
+      const mockBooks = { data: { books: [] as any[], pagination: { totalCount: 0 } } };
+      const queryParams = { search: "Dom", favorites: "1", page: "2" };
+      mockAuthRequest.query = queryParams;
+      mockBookService.getAllBooksByUser.mockResolvedValue(mockBooks);
+
+      await getBooks(mockAuthRequest as AuthReq, mockResponse as Response, mockNext);
+      expect(mockBookService.getAllBooksByUser).toHaveBeenCalledWith("user-id-123", queryParams);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+    });
+
     it("deve chamar next() quando service lança erro", async () => {
       const error = new Error("Erro ao buscar livros");
       mockBookService.getAllBooksByUser.mockRejectedValue(error);

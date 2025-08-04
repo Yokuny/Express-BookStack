@@ -24,6 +24,17 @@ export const bookQuerySchema = z.object({
     .refine((val) => val.length <= 100, {
       message: "Termo de busca deve ter no máximo 100 caracteres",
     }),
+  favorites: z
+    .string()
+    .optional()
+    .refine((val) => val === undefined || ["true", "false", "1", "0"].includes(val), {
+      message: "Filtro de favoritos deve ser 'true', 'false', '1' ou '0'",
+    })
+    .transform((val) => {
+      if (val === "true" || val === "1") return true;
+      if (val === "false" || val === "0") return false;
+      return undefined;
+    }),
 });
 
 export type BookQuery = z.infer<typeof bookQuerySchema>;
