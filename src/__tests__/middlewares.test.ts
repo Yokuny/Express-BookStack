@@ -1,5 +1,5 @@
-import request from "supertest";
 import express from "express";
+import request from "supertest";
 import { errorHandler } from "../middlewares/errorHandler.middleware";
 import { createTestApp, createTestUser, loginTestUser } from "./helpers/testHelpers";
 

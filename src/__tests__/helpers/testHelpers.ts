@@ -1,12 +1,12 @@
-import request from "supertest";
-import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import express from "express";
+import request from "supertest";
 import { corsOptions } from "../../config/cors.config";
 import { errorHandler } from "../../middlewares/errorHandler.middleware";
 import { authRoute } from "../../routes/auth.route";
-import { userRoute } from "../../routes/user.route";
 import { bookRoute } from "../../routes/book.route";
+import { userRoute } from "../../routes/user.route";
 
 export const createTestApp = () => {
   const app = express();

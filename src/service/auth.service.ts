@@ -27,14 +27,14 @@ export const signin = async (data: UserAcess): Promise<Tokens> => {
   return { refreshToken, accessToken };
 };
 
-export const generateTokensForGuest = async (userId: string): Promise<Tokens> => {
-  const refreshToken = jwt.sign({ user: userId }, env.REFRESH_TOKEN_SECRET, {
+export const generateTokensForGuest = async (userID: string): Promise<Tokens> => {
+  const refreshToken = jwt.sign({ user: userID }, env.REFRESH_TOKEN_SECRET, {
     expiresIn: "3d",
   });
 
-  await repository.updateUserRefreshToken(userId, refreshToken);
+  await repository.updateUserRefreshToken(userID, refreshToken);
 
-  const accessToken = jwt.sign({ user: userId }, env.ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign({ user: userID }, env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1h",
   });
 
