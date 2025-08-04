@@ -1,5 +1,5 @@
 import request from "supertest";
-import { createTestApp, createTestUser, loginTestUser, createTestBook } from "./helpers/testHelpers";
+import { createTestApp, createTestBook, createTestUser, loginTestUser } from "./helpers/testHelpers";
 
 describe("Book Routes", () => {
   const app = createTestApp();
@@ -117,10 +117,7 @@ describe("Book Routes", () => {
         isFavorite: true,
       };
 
-      const res = await request(app)
-        .put(`/books/${bookData.isbn}`)
-        .set("Authorization", `Bearer ${accessToken}`)
-        .send(updateData);
+      const res = await request(app).put(`/books/${bookData.isbn}`).set("Authorization", `Bearer ${accessToken}`).send(updateData);
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.data.name).toBe(updateData.name);
@@ -131,9 +128,7 @@ describe("Book Routes", () => {
   describe("PATCH /books/:isbn/favorite", () => {
     it("deve alternar status de favorito do livro", async () => {
       const { bookData } = await createTestBook(app, accessToken);
-      const res = await request(app)
-        .patch(`/books/${bookData.isbn}/favorite`)
-        .set("Authorization", `Bearer ${accessToken}`);
+      const res = await request(app).patch(`/books/${bookData.isbn}/favorite`).set("Authorization", `Bearer ${accessToken}`);
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
     });

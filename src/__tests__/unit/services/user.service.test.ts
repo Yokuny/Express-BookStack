@@ -165,9 +165,7 @@ describe("User Service", () => {
         accessToken: "guest-access-token",
         refreshToken: "guest-refresh-token",
       };
-      mockUuidv4
-        .mockReturnValueOnce("guest1234567-890a-bcde-fghi-jklmnopqrstu")
-        .mockReturnValueOnce("randompass123-456-789a-bcde-fghijklmnopq");
+      mockUuidv4.mockReturnValueOnce("guest1234567-890a-bcde-fghi-jklmnopqrstu").mockReturnValueOnce("randompass123-456-789a-bcde-fghijklmnopq");
       mockBcrypt.hash.mockResolvedValue(mockHashedPassword as never);
       mockUserRepository.signup.mockResolvedValue(mockCreatedUser as any);
       mockAuthService.generateTokensForGuest.mockResolvedValue(mockTokens);
@@ -196,7 +194,7 @@ describe("User Service", () => {
       expect(mockUserRepository.signup).toHaveBeenCalledWith(
         expect.objectContaining({
           name: expectedGuestName,
-        })
+        }),
       );
     });
 
