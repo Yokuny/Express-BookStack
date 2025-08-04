@@ -4,7 +4,8 @@ import { CustomError } from "../models/error.type";
 
 // biome-ignore lint: any
 export const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunction): void => {
-  console.log(err.message);
+  console.error("🚨 ERRO:", err.message);
+
   if (err instanceof CustomError) {
     res.status(err.status).send(badRespObj({ message: err.message }));
   } else {
