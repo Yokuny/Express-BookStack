@@ -1,6 +1,6 @@
 import { User } from "../database";
-import * as repository from "../repositories/user.repository";
 import type { UserAcess } from "../models";
+import * as repository from "../repositories/user.repository";
 
 jest.mock("../database", () => ({
   User: {
@@ -179,9 +179,7 @@ describe("User Repository Integration Tests", () => {
       const createdUser = await repository.signup(userData);
       const promises = Array(10)
         .fill(null)
-        .map(() =>
-          Promise.all([repository.getUserById(createdUser._id.toString()), repository.getUserByName(userData.name)])
-        );
+        .map(() => Promise.all([repository.getUserById(createdUser._id.toString()), repository.getUserByName(userData.name)]));
 
       const res = await Promise.all(promises);
       res.forEach(([userById, userByName]) => {

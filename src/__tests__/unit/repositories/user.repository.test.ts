@@ -1,6 +1,6 @@
 import { User } from "../../../database";
-import * as repository from "../../../repositories/user.repository";
 import type { UserAcess } from "../../../models";
+import * as repository from "../../../repositories/user.repository";
 
 jest.mock("../../../database", () => ({
   User: {
